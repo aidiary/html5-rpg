@@ -11,3 +11,9 @@ UP = 3;
 function div(a, b) {
     return Math.round(a / b - 0.5);
 }
+
+function DisplayPropertyNames(obj) {
+    var names = "";
+    for (var name in obj) names += name + " / ";
+    alert(names);
+}

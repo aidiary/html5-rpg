@@ -1,19 +1,9 @@
-function Player(name, pos, dir) {
-    this.name = name;
-    this.x = pos[0];
-    this.y = pos[1];
-    this.px = this.x * GS;
-    this.py = this.y * GS;
-    this.vx = 0;
-    this.vy = 0;
-    this.speed = 4;
-    this.moving = false;
-    this.direction = dir;
-    this.image = new Image();
-    this.image.src = "images/player.png";
-    this.animcycle = 12;
-    this.frame = 0;
+// Player is a subclass of Character
+function Player(name, x, y, dir) {
+    Character.call(this, name, x, y, dir);
 }
+
+Player.prototype = new Character();
 
 Player.prototype.update = function(map) {
     this.frame += 1;
@@ -26,7 +16,6 @@ Player.prototype.update = function(map) {
             this.moving = false;
             this.x = div(this.px, GS);
             this.y = div(this.py, GS);
-            $("#pos").text("(" + this.x + ", " + this.y + ")");
         } else {
             return;
         }
@@ -42,16 +31,6 @@ Player.prototype.update = function(map) {
     } else if (activeKey == 40) {
         this.moveStart(DOWN, map);
     }
-
-    $("#keycode").text(activeKey);
-}
-
-Player.prototype.draw = function(ctx, offset) {
-    offsetx = offset[0];
-    offsety = offset[1];
-    var no = div(this.frame, this.animcycle) % 4
-    ctx.drawImage(this.image, no*GS, this.direction*GS, GS, GS,
-                  this.px-offsetx, this.py-offsety, GS, GS);
 }
 
 Player.prototype.moveStart = function(dir, map) {

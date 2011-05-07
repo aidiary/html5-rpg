@@ -4,6 +4,7 @@ function Map(name) {
     this.col = -1;
     this.defaultTile = 0;
     this.data = null;
+    this.charas = [];  // characters on this map
 
     // images are class property
     Map.images = new Array(256);
@@ -44,6 +45,13 @@ Map.prototype.load = function(filename) {
     }
 }
 
+Map.prototype.update = function() {
+    // update characters on this map
+    for (i = 0; i < this.charas.length; i++) {
+        this.charas[i].update(this);
+    }
+}
+
 Map.prototype.draw = function(ctx, offset) {
     offsetx = offset[0];
     offsety = offset[1];
@@ -63,6 +71,11 @@ Map.prototype.draw = function(ctx, offset) {
             }
         }
     }
+
+    // draw characters on this map
+    for (i = 0; i < this.charas.length; i++) {
+        this.charas[i].draw(ctx, offset);
+    }
 }
 
 Map.prototype.isMovable = function(x, y) {
@@ -74,4 +87,8 @@ Map.prototype.isMovable = function(x, y) {
         return false;
     }
     return true;
+}
+
+Map.prototype.addChara = function(chara) {
+    this.charas.push(chara);
 }

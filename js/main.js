@@ -2,7 +2,15 @@ window.onload = function() {
     // initialize global objects
     activeKey = null;
     map = new Map("test");
-    player = new Player("hero", [1, 1], DOWN);
+    player = new Player("player", 1, 1, DOWN);
+    king = new Character("king", 2, 1, DOWN);
+    minister = new Character("minister", 3, 1, DOWN);
+    soldier = new Character("soldier", 4, 1, DOWN);
+    // add characters to map
+    map.addChara(player);
+    map.addChara(king);
+    map.addChara(minister);
+    map.addChara(soldier);
 
     // start mainloop
     setInterval('mainLoop()', 16);
@@ -15,7 +23,7 @@ function mainLoop() {
     ctx.clearRect(0, 0, WIDTH, HEIGHT);
 
     // update
-    player.update(map);
+    map.update();
 
     // draw
     offset = calcOffset(player);
