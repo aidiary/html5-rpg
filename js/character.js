@@ -2,7 +2,7 @@ STOP = 0;
 MOVE = 1;
 PROB_MOVE = 0.1;
 
-function Character(name, x, y, dir, movetype) {
+function Character(name, x, y, dir, movetype, message) {
     this.name = name;
     this.x = x;
     this.y = y;
@@ -16,11 +16,12 @@ function Character(name, x, y, dir, movetype) {
     this.movetype = movetype;
     this.animcycle = 12;
     this.frame = 0;
+    this.message = message;
 
     // images are class property
     Character.images = new Object();
     var names = ["player", "king", "minister", "soldier"];
-    for (i = 0; i < names.length; i++) {
+    for (var i = 0; i < names.length; i++) {
         Character.images[names[i]] = new Image();
         Character.images[names[i]].src = "images/" + names[i] + ".png";
     }

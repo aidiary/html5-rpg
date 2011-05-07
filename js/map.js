@@ -8,7 +8,7 @@ function Map(name) {
 
     // images are class property
     Map.images = new Array(256);
-    for (i = 0; i < 256; i++) {
+    for (var i = 0; i < 256; i++) {
         Map.images[i] = new Image();
     }
     Map.images[0].src = "images/grass.png";
@@ -19,6 +19,9 @@ function Map(name) {
 
     // load map data
     this.load("map/" + name + ".map");
+
+    // load event data
+    this.loadEvent("map/" + name + ".evt");
 }
 
 Map.prototype.load = function(filename) {
@@ -36,18 +39,35 @@ Map.prototype.load = function(filename) {
     this.defaultTile = parseInt(lines[1]);
     // map data
     this.data = new Array(this.row);
-    for (i = 0; i < this.row; i++) {
+    for (var i = 0; i < this.row; i++) {
         this.data[i] = new Array(this.col);
-        for (j = 0; j < this.col; j++) {
+        for (var j = 0; j < this.col; j++) {
             // map data starts from lines[2]
             this.data[i][j] = parseInt(lines[i+2][j]);
         }
     }
 }
 
+Map.prototype.loadEvent = function(filename) {
+    // load event file
+    var httpObj = $.ajax({
+        url: filename,
+        async: false
+    });
+    var lines = httpObj.responseText.split("\n");
+    for (var i = 0; i < lines.length - 1; i++) {
+        if (lines[i][0] == "#") continue;  // comment line
+        var data = lines[i].split("\t");
+        var eventType = data[0];
+        if (eventType == "CHARA") {
+            this.createChara(data);
+        }
+    }
+}
+
 Map.prototype.update = function() {
     // update characters on this map
-    for (i = 0; i < this.charas.length; i++) {
+    for (var i = 0; i < this.charas.length; i++) {
         this.charas[i].update(this);
     }
 }
@@ -61,8 +81,8 @@ Map.prototype.draw = function(ctx, offset) {
     endx = startx + div(WIDTH, GS) + 1;
     starty = div(offsety, GS);
     endy = starty + div(HEIGHT, GS) + 1;
-    for (y = starty; y < endy; y++) {
-        for (x = startx; x < endx; x++) {
+    for (var y = starty; y < endy; y++) {
+        for (var x = startx; x < endx; x++) {
             // draw default image at the outside of map
             if (x < 0 || y < 0 || x > this.col-1 || y > this.row-1) {
                 ctx.drawImage(Map.images[this.defaultTile], x*GS-offsetx, y*GS-offsety);
@@ -73,7 +93,7 @@ Map.prototype.draw = function(ctx, offset) {
     }
 
     // draw characters on this map
-    for (i = 0; i < this.charas.length; i++) {
+    for (var i = 0; i < this.charas.length; i++) {
         this.charas[i].draw(ctx, offset);
     }
 }
@@ -88,7 +108,7 @@ Map.prototype.isMovable = function(x, y) {
     }
 
     // cannot move to character cell
-    for (i = 0; i < this.charas.length; i++) {
+    for (var i = 0; i < this.charas.length; i++) {
         if (this.charas[i].x == x && this.charas[i].y == y) {
             return false;
         }
@@ -99,4 +119,15 @@ Map.prototype.isMovable = function(x, y) {
 
 Map.prototype.addChara = function(chara) {
     this.charas.push(chara);
+}
+
+Map.prototype.createChara = function(data) {
+    var name = data[1];
+    var x = parseInt(data[2]);
+    var y = parseInt(data[3]);
+    var direction = parseInt(data[4]);
+    var moveType = parseInt(data[5]);
+    var message = data[6];
+    var chara = new Character(name, x, y, direction, moveType, message);
+    this.addChara(chara);
 }
