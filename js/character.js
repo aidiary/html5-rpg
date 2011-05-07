@@ -1,4 +1,8 @@
-function Character(name, x, y, dir) {
+STOP = 0;
+MOVE = 1;
+PROB_MOVE = 0.1;
+
+function Character(name, x, y, dir, movetype) {
     this.name = name;
     this.x = x;
     this.y = y;
@@ -9,6 +13,7 @@ function Character(name, x, y, dir) {
     this.speed = 4;
     this.moving = false;
     this.direction = dir;
+    this.movetype = movetype;
     this.animcycle = 12;
     this.frame = 0;
 
@@ -35,6 +40,9 @@ Character.prototype.update = function(map) {
         } else {
             return;
         }
+    } else if (this.movetype == MOVE && Math.random() < PROB_MOVE) {
+        this.direction = Math.floor(Math.random() * 4);  // 0 - 3
+        this.moveStart(this.direction, map);
     }
 }
 
@@ -44,4 +52,36 @@ Character.prototype.draw = function(ctx, offset) {
     var no = div(this.frame, this.animcycle) % 4
     ctx.drawImage(Character.images[this.name], no*GS, this.direction*GS, GS, GS,
                   this.px-offsetx, this.py-offsety, GS, GS);
+}
+
+Character.prototype.moveStart = function(dir, map) {
+    if (dir == LEFT) {
+        this.direction = LEFT;
+        if (map.isMovable(this.x-1, this.y)) {
+            this.vx = - this.speed;
+            this.vy = 0;
+            this.moving = true;
+        }
+    } else if (dir == UP) {
+        this.direction = UP;
+        if (map.isMovable(this.x, this.y-1)) {
+            this.vx = 0;
+            this.vy = - this.speed;
+            this.moving = true;
+        }
+    } else if (dir == RIGHT) {
+        this.direction = RIGHT;
+        if (map.isMovable(this.x+1, this.y)) {
+            this.vx = this.speed;
+            this.vy = 0;
+            this.moving = true;
+        }
+    } else if (dir == DOWN) {
+        this.direction = DOWN;
+        if (map.isMovable(this.x, this.y+1)) {
+            this.vx = 0;
+            this.vy = this.speed;
+            this.moving = true;
+        }
+    }
 }

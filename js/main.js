@@ -3,9 +3,9 @@ window.onload = function() {
     activeKey = null;
     map = new Map("test");
     player = new Player("player", 1, 1, DOWN);
-    king = new Character("king", 2, 1, DOWN);
-    minister = new Character("minister", 3, 1, DOWN);
-    soldier = new Character("soldier", 4, 1, DOWN);
+    king = new Character("king", 2, 1, DOWN, STOP);
+    minister = new Character("minister", 3, 1, DOWN, MOVE);
+    soldier = new Character("soldier", 4, 1, DOWN, MOVE);
     // add characters to map
     map.addChara(player);
     map.addChara(king);

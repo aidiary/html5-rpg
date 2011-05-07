@@ -32,35 +32,3 @@ Player.prototype.update = function(map) {
         this.moveStart(DOWN, map);
     }
 }
-
-Player.prototype.moveStart = function(dir, map) {
-    if (dir == LEFT) {
-        this.direction = LEFT;
-        if (map.isMovable(this.x-1, this.y)) {
-            this.vx = - this.speed;
-            this.vy = 0;
-            this.moving = true;
-        }
-    } else if (dir == UP) {
-        this.direction = UP;
-        if (map.isMovable(this.x, this.y-1)) {
-            this.vx = 0;
-            this.vy = - this.speed;
-            this.moving = true;
-        }
-    } else if (dir == RIGHT) {
-        this.direction = RIGHT;
-        if (map.isMovable(this.x+1, this.y)) {
-            this.vx = this.speed;
-            this.vy = 0;
-            this.moving = true;
-        }
-    } else if (dir == DOWN) {
-        this.direction = DOWN;
-        if (map.isMovable(this.x, this.y+1)) {
-            this.vx = 0;
-            this.vy = this.speed;
-            this.moving = true;
-        }
-    }
-}
