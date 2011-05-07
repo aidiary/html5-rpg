@@ -86,6 +86,14 @@ Map.prototype.isMovable = function(x, y) {
     if (this.data[y][x] == 1 || this.data[y][x] == 4) {
         return false;
     }
+
+    // cannot move to character cell
+    for (i = 0; i < this.charas.length; i++) {
+        if (this.charas[i].x == x && this.charas[i].y == y) {
+            return false;
+        }
+    }
+
     return true;
 }
 
