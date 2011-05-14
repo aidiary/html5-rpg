@@ -1,3 +1,8 @@
+var musicList = [
+    { name : "field", url: "music/field" },
+    { name : "castle", url: "music/castle" }
+];
+
 window.onload = function() {
     // initialize global objects
     activeKey = null;
@@ -7,6 +12,13 @@ window.onload = function() {
 
     // start mainloop
     setInterval('mainLoop()', 16);
+
+    // start music
+    var bgmNo = 0;
+    var audioObj = new Audio();
+    if (audioObj.canPlayType("audio/wav") == "maybe") { var ext = ".wav"; }
+    if (audioObj.canPlayType("audio/mp3") == "maybe") { var ext = ".mp3"; }
+    (new Audio(musicList[bgmNo].url + ext)).play();
 }
 
 function mainLoop() {
